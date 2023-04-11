@@ -7,6 +7,7 @@ import {
 } from "firebase/auth";
 import { LoadingButton } from "../LoadingButton";
 import { useStoreActions } from "../../store/hooks";
+import { editUserDocument } from "../../utils/firebase/user";
 
 export const EmailAuth = () => {
   const [email, setEmail] = useState<string>("");
@@ -31,6 +32,7 @@ export const EmailAuth = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
         login(user);
+        editUserDocument(user);
       })
       .catch((err) => {
         setError(err.code);

@@ -4,6 +4,7 @@ import { auth, googleAuthProvider } from "../../configs/firebase";
 import { Button } from "react-bootstrap";
 import { AiOutlineGoogle } from "react-icons/ai";
 import { useStoreActions } from "../../store/hooks";
+import { editUserDocument } from "../../utils/firebase/user";
 
 export const GoogleAuth = () => {
   const { login } = useStoreActions((actions) => actions);
@@ -13,6 +14,7 @@ export const GoogleAuth = () => {
     signInWithPopup(auth, googleAuthProvider)
       .then(({ user }) => {
         login(user);
+        editUserDocument(user);
       })
       .catch((err) => {
         setError(err.code);

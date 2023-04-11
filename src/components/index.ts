@@ -6,3 +6,5 @@ export * from "./EmailAuth";
 export * from "./SignOut";
 export * from "./SignOut";
 export * from "./PrivateRoute";
+export * from "./Header";
+export * from "./Footer";

@@ -1,12 +1,13 @@
 import { useCallback, useState } from "react";
 import OtpInput from "react-otp-input";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { RecaptchaVerifier, User, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../configs/firebase";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Error } from "../Error";
 import { LoadingButton } from "../LoadingButton";
 import { useStoreActions } from "../../store/hooks";
+import { editUserDocument } from "../../utils/firebase/user";
 
 export const OtpAuth = () => {
   const [error, setError] = useState<string>("");
@@ -56,7 +57,8 @@ export const OtpAuth = () => {
     window.confirmationResult
       .confirm(otp)
       .then(async (result: any) => {
-        login(result.user as typeof auth.currentUser);
+        login(result.user as User);
+        editUserDocument(result.user as User);
       })
       .catch((error: any) => {
         setError(error.code);

@@ -4,6 +4,7 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, facebookAuthProvider } from "../../configs/firebase";
 import { useState } from "react";
 import { useStoreActions } from "../../store/hooks";
+import { editUserDocument } from "../../utils/firebase/user";
 
 export const FacebookAuth = () => {
   const { login } = useStoreActions((actions) => actions);
@@ -13,6 +14,7 @@ export const FacebookAuth = () => {
     signInWithPopup(auth, facebookAuthProvider)
       .then(({ user }) => {
         login(user);
+        editUserDocument(user);
       })
       .catch((err) => {
         setError(err.code);
