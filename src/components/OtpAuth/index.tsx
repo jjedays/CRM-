@@ -80,6 +80,7 @@ export const OtpAuth = () => {
             renderInput={(props) => <input {...props} />}
           />
           <LoadingButton
+            className="mt-3"
             variant="primary"
             onClick={OTPVerify}
             isLoading={isLoading}
@@ -97,6 +98,7 @@ export const OtpAuth = () => {
           <div id="recaptcha-container"></div>
           {phoneNumber.match(phoneNumberRegexp) && (
             <LoadingButton
+              className="mt-3"
               variant="primary"
               onClick={onSignUp}
               isLoading={isLoading}

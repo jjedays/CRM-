@@ -5,3 +5,4 @@ export * from "./Error";
 export * from "./EmailAuth";
 export * from "./SignOut";
 export * from "./SignOut";
+export * from "./PrivateRoute";
