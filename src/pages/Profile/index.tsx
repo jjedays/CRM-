@@ -24,7 +24,7 @@ export const Profile = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getUserDocument(user)
+    getUserDocument(user.uid)
       .then((res) => {
         reset(res);
       })
@@ -58,13 +58,25 @@ export const Profile = () => {
   const submitForm = handleSubmit((data) => {
     setIsLoading(true);
     const { age, displayName, bio } = data as IUser;
-    editUserDocument(user, age, displayName, bio).finally(() => {
+    editUserDocument(user.uid, age, displayName, bio).finally(() => {
       setIsLoading(false);
     });
   });
 
   return (
     <Form onSubmit={submitForm} noValidate>
+      <Form.Group className="mb-3" controlId="formBasicName">
+        <Form.Label>Name</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Your name"
+          isInvalid={!!errors?.displayName?.message}
+          {...register("displayName", { required: "Name is required" })}
+        />
+        <Form.Control.Feedback type="invalid">
+          {errors?.displayName?.message?.toString()}
+        </Form.Control.Feedback>
+      </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicAge">
         <Form.Label>Age</Form.Label>
         <Form.Control
@@ -78,18 +90,6 @@ export const Profile = () => {
         />
         <Form.Control.Feedback type="invalid">
           {errors?.age?.message?.toString()}
-        </Form.Control.Feedback>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicName">
-        <Form.Label>Name</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Your name"
-          isInvalid={!!errors?.displayName?.message}
-          {...register("displayName", { required: "Name is required" })}
-        />
-        <Form.Control.Feedback type="invalid">
-          {errors?.displayName?.message?.toString()}
         </Form.Control.Feedback>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicBio">

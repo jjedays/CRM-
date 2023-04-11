@@ -8,7 +8,7 @@ import { LoadingButton } from "../LoadingButton";
 import { useStoreActions } from "../../store/hooks";
 import { editUserDocument } from "../../utils/firebase/user";
 import { Modal } from "react-bootstrap";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const OtpAuth = () => {
   const [error, setError] = useState<string>("");
@@ -17,6 +17,7 @@ export const OtpAuth = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPhoneNumberSet, setIsPhoneNumberSet] = useState<boolean>(false);
   const { login } = useStoreActions((actions) => actions);
+  const navigate = useNavigate();
 
   const phoneNumberRegexp =
     /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
@@ -63,8 +64,8 @@ export const OtpAuth = () => {
       .confirm(otp)
       .then(async (result: any) => {
         login(result.user as User);
-        editUserDocument(result.user as User);
-        return <Navigate to={{ pathname: "/profile" }} />;
+        editUserDocument(result.user.uid as string);
+        return navigate("/profile");
       })
       .catch((error: any) => {
         setError(error.code);

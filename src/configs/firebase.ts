@@ -24,6 +24,7 @@ const firebaseConfig = {
   appId,
 };
 
+export const adminEmail = process.env.REACT_APP_ADMIN_EMAIL;
 export const app = initializeApp(firebaseConfig);
 export const googleAuthProvider = new GoogleAuthProvider();
 export const facebookAuthProvider = new FacebookAuthProvider();

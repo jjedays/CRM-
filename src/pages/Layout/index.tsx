@@ -5,7 +5,7 @@ export const Layout = () => {
   return (
     <>
       <Header />
-      <main className="p-4">
+      <main className="container">
         <Outlet />
       </main>
       <Footer />

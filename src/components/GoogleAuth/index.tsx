@@ -5,16 +5,19 @@ import { Button } from "react-bootstrap";
 import { AiOutlineGoogle } from "react-icons/ai";
 import { useStoreActions } from "../../store/hooks";
 import { editUserDocument } from "../../utils/firebase/user";
+import { useNavigate } from "react-router-dom";
 
 export const GoogleAuth = () => {
   const { login } = useStoreActions((actions) => actions);
   const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   const authHandler = () => {
     signInWithPopup(auth, googleAuthProvider)
       .then(({ user }) => {
         login(user);
-        editUserDocument(user);
+        editUserDocument(user.uid as string);
+        return navigate("/profile");
       })
       .catch((err) => {
         setError(err.code);

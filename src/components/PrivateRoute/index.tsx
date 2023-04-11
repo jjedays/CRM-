@@ -14,6 +14,6 @@ export const ProtectedRoute: React.FC<IProtectedRouteProps> = ({
   if (isAuthenticated) {
     return outlet;
   } else {
-    return <Navigate to={{ pathname: authenticationPath }} />;
+    return <Navigate to={authenticationPath} />;
   }
 };

@@ -5,16 +5,19 @@ import { auth, facebookAuthProvider } from "../../configs/firebase";
 import { useState } from "react";
 import { useStoreActions } from "../../store/hooks";
 import { editUserDocument } from "../../utils/firebase/user";
+import { useNavigate } from "react-router-dom";
 
 export const FacebookAuth = () => {
   const { login } = useStoreActions((actions) => actions);
   const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   const authHandler = () => {
     signInWithPopup(auth, facebookAuthProvider)
       .then(({ user }) => {
         login(user);
-        editUserDocument(user);
+        editUserDocument(user.uid as string);
+        return navigate("/profile");
       })
       .catch((err) => {
         setError(err.code);

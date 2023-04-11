@@ -9,11 +9,13 @@ import { LoadingButton } from "../LoadingButton";
 import { useStoreActions } from "../../store/hooks";
 import { editUserDocument } from "../../utils/firebase/user";
 import { FieldValues, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 export const EmailAuth = () => {
   const [isNewAccount, setIsNewAccount] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   const {
     register,
@@ -42,7 +44,7 @@ export const EmailAuth = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
         login(user);
-        editUserDocument(user);
+        editUserDocument(user.uid as string);
       })
       .catch((err) => {
         setError(err.code);
@@ -54,9 +56,8 @@ export const EmailAuth = () => {
     (isNewAccount ? createAccount : loginInAccount)(data).finally(() => {
       setIsLoading(false);
     });
+    return navigate("/profile");
   });
-
-  console.log(errors);
 
   return (
     <>
