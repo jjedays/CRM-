@@ -1,13 +1,14 @@
-import { useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import OtpInput from "react-otp-input";
 import { RecaptchaVerifier, User, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../configs/firebase";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { Error } from "../Error";
 import { LoadingButton } from "../LoadingButton";
 import { useStoreActions } from "../../store/hooks";
 import { editUserDocument } from "../../utils/firebase/user";
+import { Modal } from "react-bootstrap";
+import { Navigate } from "react-router-dom";
 
 export const OtpAuth = () => {
   const [error, setError] = useState<string>("");
@@ -19,6 +20,10 @@ export const OtpAuth = () => {
 
   const phoneNumberRegexp =
     /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
+  useEffect(() => {
+    setPhoneNumber("");
+  }, []);
 
   const onSignUp = () => {
     setIsLoading(true);
@@ -42,7 +47,7 @@ export const OtpAuth = () => {
       window.recaptchaVerifier = new RecaptchaVerifier(
         "recaptcha-container",
         {
-          size: "invisible",
+          size: "normal",
           callback: () => {
             onSignUp();
           },
@@ -52,13 +57,14 @@ export const OtpAuth = () => {
     }
   };
 
-  const OTPVerify = useCallback(() => {
+  const OTPVerify = () => {
     setIsLoading(true);
     window.confirmationResult
       .confirm(otp)
       .then(async (result: any) => {
         login(result.user as User);
         editUserDocument(result.user as User);
+        return <Navigate to={{ pathname: "/profile" }} />;
       })
       .catch((error: any) => {
         setError(error.code);
@@ -66,11 +72,9 @@ export const OtpAuth = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [otp, login]);
+  };
 
-  return error ? (
-    <Error errorText={error} />
-  ) : (
+  return (
     <>
       {isPhoneNumberSet ? (
         <div>
@@ -110,6 +114,12 @@ export const OtpAuth = () => {
           )}
         </div>
       )}
+      <Modal show={!!error} onHide={() => setError("")}>
+        <Modal.Header closeButton>
+          <Modal.Title>Error!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Error: {error}</Modal.Body>
+      </Modal>
     </>
   );
 };

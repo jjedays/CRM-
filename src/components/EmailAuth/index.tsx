@@ -8,13 +8,21 @@ import {
 import { LoadingButton } from "../LoadingButton";
 import { useStoreActions } from "../../store/hooks";
 import { editUserDocument } from "../../utils/firebase/user";
+import { FieldValues, useForm } from "react-hook-form";
 
 export const EmailAuth = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
   const [isNewAccount, setIsNewAccount] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    mode: "onBlur",
+  });
 
   const { login } = useStoreActions((actions) => actions);
 
@@ -22,13 +30,15 @@ export const EmailAuth = () => {
     setIsNewAccount((prev) => !prev);
   };
 
-  const createAccount = async () => {
+  const createAccount = async (data: FieldValues) => {
+    const { email, password } = data;
     await createUserWithEmailAndPassword(auth, email, password).catch((err) => {
       setError(err.code);
     });
   };
 
-  const loginInAccount = async () => {
+  const loginInAccount = async (data: FieldValues) => {
+    const { email, password } = data;
     signInWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
         login(user);
@@ -39,13 +49,14 @@ export const EmailAuth = () => {
       });
   };
 
-  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submitForm = handleSubmit((data) => {
     setIsLoading(true);
-    (isNewAccount ? createAccount : loginInAccount)().finally(() => {
+    (isNewAccount ? createAccount : loginInAccount)(data).finally(() => {
       setIsLoading(false);
     });
-  };
+  });
+
+  console.log(errors);
 
   return (
     <>
@@ -62,19 +73,29 @@ export const EmailAuth = () => {
           <Form.Control
             type="email"
             placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            isInvalid={!!errors?.email?.message}
+            {...register("email", {
+              required: "Email is required",
+            })}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors?.email?.message?.toString()}
+          </Form.Control.Feedback>
         </Form.Group>
+
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Your password"
+            isInvalid={!!errors?.password?.message}
+            {...register("password", { required: "Password is required" })}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors?.password?.message?.toString()}
+          </Form.Control.Feedback>
         </Form.Group>
+
         <LoadingButton isLoading={isLoading} variant="primary" type="submit">
           Submit
         </LoadingButton>
