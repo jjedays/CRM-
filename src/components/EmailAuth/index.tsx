@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import { auth } from "../../configs/firebase";
 import {
   createUserWithEmailAndPassword,

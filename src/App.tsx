@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Auth, Home, Layout } from "./pages";
+import { Auth, Home, Layout, Profile } from "./pages";
 import { useStoreState } from "./store/hooks";
 import {
   IProtectedRouteProps,
@@ -28,6 +28,15 @@ function App() {
             }
           />
           <Route path="auth" element={<Auth />} />
+          <Route
+            path="profile"
+            element={
+              <ProtectedRoute
+                {...defaultProtectedRouteProps}
+                outlet={<Profile />}
+              />
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

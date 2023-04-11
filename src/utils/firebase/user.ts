@@ -13,19 +13,19 @@ export function editUserDocument(
   user: User,
   age: number,
   displayName: string,
-  location: [number, number]
+  bio: string
 ): Promise<void>;
 export async function editUserDocument(
   user: User,
   age?: number,
   displayName?: string,
-  location?: [number, number]
+  bio?: string
 ) {
-  if (age && displayName && location) {
+  if (age && displayName && bio) {
     return await setDoc(doc(db, "user", user.uid), {
       age,
       displayName,
-      location,
+      bio,
     });
   }
 
