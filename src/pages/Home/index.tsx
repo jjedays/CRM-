@@ -1,10 +1,8 @@
 import { Oval } from "react-loader-spinner";
-import { IUser } from "../../models/user";
 import { ITransfer } from "../../models/transfer";
 import { useEffect, useState } from "react";
 import { Error, TransferItem } from "../../components";
 import { getAllTransferDocuments } from "../../utils/firebase/transfers";
-import { getAllUserDocuments } from "../../utils/firebase/admin";
 
 export const Home = () => {
   const [transfers, setTransfers] = useState<ITransfer[]>([]);
@@ -46,7 +44,7 @@ export const Home = () => {
       </div>
     );
   return (
-    <div className="gap-2 d-flex flex-column mt-4">
+    <div className="gap-2 d-flex flex-column">
       {transfers.map((transfer) => {
         return (
           <TransferItem

@@ -41,7 +41,7 @@ export const Admin = () => {
       </div>
     );
   return (
-    <div className="gap-2 d-flex flex-column mt-4">
+    <div className="gap-2 d-flex flex-column">
       {users.map((user) => {
         return <UserListItem {...user} key={user.user} />;
       })}
