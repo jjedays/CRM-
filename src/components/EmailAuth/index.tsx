@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { auth } from "../../configs/firebase";
 import {
+  User,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
@@ -28,23 +29,31 @@ export const EmailAuth = () => {
 
   const { login } = useStoreActions((actions) => actions);
 
+  const authHandler = (user: User) => {
+    login(user);
+    editUserDocument(user.uid as string);
+    return navigate("/profile");
+  };
   const setAuthType = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsNewAccount((prev) => !prev);
   };
 
   const createAccount = async (data: FieldValues) => {
     const { email, password } = data;
-    await createUserWithEmailAndPassword(auth, email, password).catch((err) => {
-      setError(err.code);
-    });
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then(({ user }) => {
+        authHandler(user);
+      })
+      .catch((err) => {
+        setError(err.code);
+      });
   };
 
   const loginInAccount = async (data: FieldValues) => {
     const { email, password } = data;
     signInWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
-        login(user);
-        editUserDocument(user.uid as string);
+        authHandler(user);
       })
       .catch((err) => {
         setError(err.code);
@@ -56,7 +65,6 @@ export const EmailAuth = () => {
     (isNewAccount ? createAccount : loginInAccount)(data).finally(() => {
       setIsLoading(false);
     });
-    return navigate("/profile");
   });
 
   return (

@@ -3,13 +3,14 @@ import { getUserDocument } from "../../utils/firebase/user";
 import { useStoreState } from "../../store/hooks";
 import { Error } from "../../components";
 import { Oval } from "react-loader-spinner";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Toast, ToastContainer } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { editUserDocument } from "../../utils/firebase/user";
 import { IUser } from "../../models/user";
 
 export const Profile = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const {
     register,
@@ -58,62 +59,82 @@ export const Profile = () => {
   const submitForm = handleSubmit((data) => {
     setIsLoading(true);
     const { age, displayName, bio } = data as IUser;
-    editUserDocument(user.uid, age, displayName, bio).finally(() => {
-      setIsLoading(false);
-    });
+    editUserDocument(user.uid, age, displayName, bio)
+      .then(() => setIsSuccess(true))
+      .finally(() => {
+        setIsLoading(false);
+      });
   });
 
   return (
-    <Form onSubmit={submitForm} noValidate>
-      <Form.Group className="mb-3" controlId="formBasicName">
-        <Form.Label>Name</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Your name"
-          isInvalid={!!errors?.displayName?.message}
-          {...register("displayName", { required: "Name is required" })}
-        />
-        <Form.Control.Feedback type="invalid">
-          {errors?.displayName?.message?.toString()}
-        </Form.Control.Feedback>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicAge">
-        <Form.Label>Age</Form.Label>
-        <Form.Control
-          type="number"
-          placeholder="Your age"
-          isInvalid={!!errors?.age?.message}
-          {...register("age", {
-            required: "Age is required",
-            min: { value: 3, message: "User can't be younger then 3 y.o." },
-          })}
-        />
-        <Form.Control.Feedback type="invalid">
-          {errors?.age?.message?.toString()}
-        </Form.Control.Feedback>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicBio">
-        <Form.Label>Bio</Form.Label>
-        <Form.Control
-          as="textarea"
-          rows={3}
-          placeholder="Bio"
-          isInvalid={!!errors?.bio?.message}
-          {...register("bio", {
-            required: "Bio is required",
-            minLength: {
-              value: 20,
-              message: "Bio can't be shorter then 20 symbols",
-            },
-          })}
-        />
-        <Form.Control.Feedback type="invalid">
-          {errors?.bio?.message?.toString()}
-        </Form.Control.Feedback>
-      </Form.Group>
-      <Button variant="primary" type="submit">
-        Update
-      </Button>
-    </Form>
+    <>
+      <Form onSubmit={submitForm} noValidate>
+        <Form.Group className="mb-3" controlId="formBasicName">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Your name"
+            isInvalid={!!errors?.displayName?.message}
+            {...register("displayName", { required: "Name is required" })}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errors?.displayName?.message?.toString()}
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicAge">
+          <Form.Label>Age</Form.Label>
+          <Form.Control
+            type="number"
+            placeholder="Your age"
+            isInvalid={!!errors?.age?.message}
+            {...register("age", {
+              required: "Age is required",
+              min: { value: 3, message: "User can't be younger then 3 y.o." },
+            })}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errors?.age?.message?.toString()}
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicBio">
+          <Form.Label>Bio</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={3}
+            placeholder="Bio"
+            isInvalid={!!errors?.bio?.message}
+            {...register("bio", {
+              required: "Bio is required",
+              minLength: {
+                value: 20,
+                message: "Bio can't be shorter then 20 symbols",
+              },
+            })}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errors?.bio?.message?.toString()}
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Update
+        </Button>
+      </Form>
+      <ToastContainer position="top-start" className="p-3">
+        <Toast
+          bg="success"
+          onClose={() => setIsSuccess(false)}
+          show={isSuccess}
+          delay={3000}
+          autohide
+        >
+          <Toast.Header>
+            <strong className="me-auto">Success</strong>
+          </Toast.Header>
+          <Toast.Body>
+            <span className="text-light">Successfully updated</span>
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
+    </>
   );
 };

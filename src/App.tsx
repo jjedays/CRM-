@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Admin, Auth, Home, Layout, Profile } from "./pages";
+import { Admin, Auth, Home, Layout, Profile, Transfers } from "./pages";
 import { useStoreState } from "./store/hooks";
 import {
   IProtectedRouteProps,
@@ -40,6 +40,15 @@ function App() {
               <ProtectedRoute
                 {...defaultProtectedAdminRouteProps}
                 outlet={<Admin />}
+              />
+            }
+          />
+          <Route
+            path="transfers"
+            element={
+              <ProtectedRoute
+                {...defaultProtectedAdminRouteProps}
+                outlet={<Transfers />}
               />
             }
           />

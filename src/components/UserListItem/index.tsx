@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import { IUser } from "../../models/user";
 import { setUserRole } from "../../utils/firebase/admin";
+import { cutStr } from "../../utils/strings";
 
 export const UserListItem: React.FC<IUser> = ({
   age,
@@ -10,10 +11,6 @@ export const UserListItem: React.FC<IUser> = ({
   role,
   user,
 }) => {
-  const cutStr = (str: string) => {
-    return str.length <= 50 ? str : str.slice(0, 50).trim() + "...";
-  };
-
   const [currentRole, setCurrentRole] = useState<
     "Driver" | "Passenger" | "Dispatch"
   >(role);
@@ -28,7 +25,7 @@ export const UserListItem: React.FC<IUser> = ({
       <div className="col">Name: {displayName || "Unknown"}</div>
       <div className="col d-none d-xl-block">Age: {age || "Unknown"}</div>
       <div className="col-6 d-none d-xl-block">
-        Bio: {bio ? cutStr(bio) : "Unknown"}
+        Bio: {bio ? cutStr(bio, 50) : "Unknown"}
       </div>
       <div className="d-flex align-items-center gap-2 col justify-content-end">
         Role:
