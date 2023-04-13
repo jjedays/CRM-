@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import OtpInput from "react-otp-input";
 import { RecaptchaVerifier, User, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../configs/firebase";
 import PhoneInput from "react-phone-input-2";
@@ -7,11 +6,10 @@ import "react-phone-input-2/lib/style.css";
 import { LoadingButton } from "../LoadingButton";
 import { useStoreActions } from "../../store/hooks";
 import { editUserDocument } from "../../utils/firebase/user";
-import { Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import OTPInput from "otp-input-react";
 
 export const OtpAuth = () => {
-  const [error, setError] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [otp, setOtp] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -34,9 +32,6 @@ export const OtpAuth = () => {
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         setIsPhoneNumberSet(true);
-      })
-      .catch((error) => {
-        setError(error.code);
       })
       .finally(() => {
         setIsLoading(false);
@@ -67,10 +62,8 @@ export const OtpAuth = () => {
         editUserDocument(result.user.uid as string);
         return navigate("/profile");
       })
-      .catch((error: any) => {
-        setError(error.code);
-      })
       .finally(() => {
+        setOtp("");
         setIsLoading(false);
       });
   };
@@ -79,12 +72,13 @@ export const OtpAuth = () => {
     <>
       {isPhoneNumberSet ? (
         <div>
-          <OtpInput
+          <OTPInput
             value={otp}
             onChange={setOtp}
-            numInputs={6}
-            renderSeparator={<span>-</span>}
-            renderInput={(props) => <input {...props} />}
+            autoFocus
+            OTPLength={6}
+            otpType="number"
+            disabled={false}
           />
           <LoadingButton
             className="mt-3"
@@ -115,12 +109,6 @@ export const OtpAuth = () => {
           )}
         </div>
       )}
-      <Modal show={!!error} onHide={() => setError("")}>
-        <Modal.Header closeButton>
-          <Modal.Title>Error!</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Error: {error}</Modal.Body>
-      </Modal>
     </>
   );
 };

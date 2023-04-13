@@ -58,6 +58,7 @@ export const Transfers = () => {
     );
   return (
     <div>
+      <h1 className="mb-4">Edit and read current transfers</h1>
       <Accordion>
         <Accordion.Item eventKey="0">
           <Accordion.Header>Add new transfer</Accordion.Header>

@@ -3,6 +3,8 @@ import { ITransfer } from "../../models/transfer";
 import { useEffect, useState } from "react";
 import { Error, TransferItem } from "../../components";
 import { getAllTransferDocuments } from "../../utils/firebase/transfers";
+import Lottie from "lottie-react";
+import animation from "../../animations/no-items.json";
 
 export const Home = () => {
   const [transfers, setTransfers] = useState<ITransfer[]>([]);
@@ -44,17 +46,29 @@ export const Home = () => {
       </div>
     );
   return (
-    <div className="gap-2 d-flex flex-column">
-      {transfers.map((transfer) => {
-        return (
-          <TransferItem
-            key={transfer.transferId}
-            transfer={transfer}
-            canDelete={true}
-            reload={reload}
-          />
-        );
-      })}
+    <div>
+      <h1 className="mb-4">Current transfers</h1>
+      <div className="gap-2 d-flex flex-column">
+        {transfers.length ? (
+          transfers.map((transfer) => {
+            return (
+              <TransferItem
+                key={transfer.transferId}
+                transfer={transfer}
+                reload={reload}
+              />
+            );
+          })
+        ) : (
+          <div className="vh-100 d-flex flex-column justify-content-center">
+            <Lottie
+              animationData={animation}
+              loop={true}
+              className="w-50 h-50 mx-auto"
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

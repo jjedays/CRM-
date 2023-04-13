@@ -6,7 +6,7 @@ import { getUserDocument } from "../../utils/firebase/user";
 import { useEffect, useState } from "react";
 import { IUser } from "../../models/user";
 import { Oval } from "react-loader-spinner";
-import { cutStr } from "../../utils/strings";
+import { cutStr, formatId } from "../../utils/strings";
 
 export const TransferItem: React.FC<ITransferItemProps> = ({
   transfer,
@@ -39,7 +39,7 @@ export const TransferItem: React.FC<ITransferItemProps> = ({
       <div className="col d-none d-xl-flex align-items-center">
         Dispatch:{" "}
         {dispatchData ? (
-          cutStr(dispatchData.displayName || dispatchData.user, 10)
+          cutStr(dispatchData.displayName || formatId(dispatchData.user), 12)
         ) : (
           <Oval
             height={20}
@@ -58,7 +58,7 @@ export const TransferItem: React.FC<ITransferItemProps> = ({
       <div className="col d-none d-xl-flex align-items-center">
         Driver:{" "}
         {driverData ? (
-          cutStr(driverData.displayName || driverData.user, 10)
+          cutStr(driverData.displayName || formatId(driverData.user), 12)
         ) : (
           <Oval
             height={20}

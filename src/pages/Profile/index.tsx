@@ -25,7 +25,7 @@ export const Profile = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getUserDocument(user.uid)
+    getUserDocument(user!.uid)
       .then((res) => {
         reset(res);
       })
@@ -59,7 +59,7 @@ export const Profile = () => {
   const submitForm = handleSubmit((data) => {
     setIsLoading(true);
     const { age, displayName, bio } = data as IUser;
-    editUserDocument(user.uid, age, displayName, bio)
+    editUserDocument(user!.uid, age, displayName, bio)
       .then(() => setIsSuccess(true))
       .finally(() => {
         setIsLoading(false);
@@ -67,7 +67,8 @@ export const Profile = () => {
   });
 
   return (
-    <>
+    <div>
+      <h1 className="mb-4">Edit profile data</h1>
       <Form onSubmit={submitForm} noValidate>
         <Form.Group className="mb-3" controlId="formBasicName">
           <Form.Label>Name</Form.Label>
@@ -135,6 +136,6 @@ export const Profile = () => {
           </Toast.Body>
         </Toast>
       </ToastContainer>
-    </>
+    </div>
   );
 };

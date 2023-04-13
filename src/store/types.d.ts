@@ -1,4 +1,4 @@
-import { User } from "firebase-auth";
+import { User } from "firebase/auth";
 import { Action } from "easy-peasy";
 
 interface StoreModel {

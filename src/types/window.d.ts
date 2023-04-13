@@ -1,10 +1,10 @@
-import { Auth } from "firebase/auth";
+import { ConfirmationResult, RecaptchaVerifier } from "firebase/auth";
 
 export {};
 
 declare global {
   interface Window {
-    recaptchaVerifier: any;
-    confirmationResult: any;
+    recaptchaVerifier: RecaptchaVerifier;
+    confirmationResult: ConfirmationResult;
   }
 }

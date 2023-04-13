@@ -41,10 +41,13 @@ export const Admin = () => {
       </div>
     );
   return (
-    <div className="gap-2 d-flex flex-column">
-      {users.map((user) => {
-        return <UserListItem {...user} key={user.user} />;
-      })}
+    <div>
+      <h1 className="mb-4">Edit users</h1>
+      <div className="gap-2 d-flex flex-column">
+        {users.map((user) => {
+          return <UserListItem {...user} key={user.user} />;
+        })}
+      </div>
     </div>
   );
 };

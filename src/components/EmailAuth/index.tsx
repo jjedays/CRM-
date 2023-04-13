@@ -21,7 +21,6 @@ export const EmailAuth = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({
     mode: "onBlur",
@@ -72,7 +71,7 @@ export const EmailAuth = () => {
       <Form.Check
         type="switch"
         id="custom-switch"
-        label="Is new account"
+        label="New in our CRM?"
         checked={isNewAccount}
         onChange={setAuthType}
       />

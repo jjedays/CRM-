@@ -1,5 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Admin, Auth, Home, Layout, Profile, Transfers } from "./pages";
+import {
+  Admin,
+  Auth,
+  Home,
+  Layout,
+  NotFound,
+  Profile,
+  Transfers,
+} from "./pages";
 import { useStoreState } from "./store/hooks";
 import {
   IProtectedRouteProps,
@@ -24,15 +32,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route
-            index
-            element={
-              <ProtectedRoute
-                {...defaultProtectedRouteProps}
-                outlet={<Home />}
-              />
-            }
-          />
+          <Route index element={<Home />} />
           <Route path="auth" element={<Auth />} />
           <Route
             path="admin"
@@ -61,6 +61,7 @@ function App() {
               />
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>

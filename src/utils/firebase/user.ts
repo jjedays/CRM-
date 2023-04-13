@@ -8,6 +8,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../configs/firebase";
 import { IUser } from "../../models/user";
+import { Role } from "../../types/role";
 
 export function editUserDocument(user: string): Promise<void>;
 export function editUserDocument(
@@ -47,9 +48,6 @@ export const getUserDocument = async (user: string) => {
   return res;
 };
 
-export const getUsersByRole = (
-  users: IUser[],
-  role: "Driver" | "Passenger" | "Dispatch"
-) => {
+export const getUsersByRole = (users: IUser[], role: Role) => {
   return users.filter((user) => user.role === role);
 };

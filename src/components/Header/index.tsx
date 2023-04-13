@@ -34,9 +34,11 @@ export const Header = () => {
           <Nav className="d-flex flex-column">
             <Nav.Link onClick={() => linkClickHandler("/")}>Home</Nav.Link>
             <Nav.Link onClick={() => linkClickHandler("/auth")}>Auth</Nav.Link>
-            <Nav.Link onClick={() => linkClickHandler("/profile")}>
-              Profile
-            </Nav.Link>
+            {user && (
+              <Nav.Link onClick={() => linkClickHandler("/profile")}>
+                Profile
+              </Nav.Link>
+            )}
             {user?.email === adminEmail && (
               <>
                 <Nav.Link onClick={() => linkClickHandler("/transfers")}>

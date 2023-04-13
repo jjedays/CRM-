@@ -3,6 +3,7 @@ import { Dropdown } from "react-bootstrap";
 import { IUser } from "../../models/user";
 import { setUserRole } from "../../utils/firebase/admin";
 import { cutStr } from "../../utils/strings";
+import { Role } from "../../types/role";
 
 export const UserListItem: React.FC<IUser> = ({
   age,
@@ -11,11 +12,9 @@ export const UserListItem: React.FC<IUser> = ({
   role,
   user,
 }) => {
-  const [currentRole, setCurrentRole] = useState<
-    "Driver" | "Passenger" | "Dispatch"
-  >(role);
+  const [currentRole, setCurrentRole] = useState<Role>(role);
 
-  const setRole = (role: "Driver" | "Passenger" | "Dispatch") => {
+  const setRole = (role: Role) => {
     setCurrentRole(role);
     setUserRole(user, role);
   };

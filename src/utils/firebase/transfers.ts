@@ -34,7 +34,7 @@ export const deleteTransferDocument = async (id: string) => {
 };
 
 export const getAllTransferDocuments = async () => {
-  let res = [] as DocumentData[];
+  const res = [] as DocumentData[];
   const querySnapshot = await getDocs(collection(db, "transfer"));
   querySnapshot.forEach((doc) => {
     res.push({ ...doc.data(), transferId: doc.id });

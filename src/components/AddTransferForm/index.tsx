@@ -14,6 +14,7 @@ import { TiTick } from "react-icons/ti";
 import { useForm } from "react-hook-form";
 import { LoadingButton } from "../LoadingButton";
 import { addTransferDocument } from "../../utils/firebase/transfers";
+import { formatId } from "../../utils/strings";
 
 export const AddTransferForm: React.FC<IAddTransferFormProps> = ({
   users,
@@ -46,14 +47,14 @@ export const AddTransferForm: React.FC<IAddTransferFormProps> = ({
     reset();
   };
 
-  const submitForm = handleSubmit((data) => {
+  const submitForm = handleSubmit(async (data) => {
     setIsLoading(true);
     const { dispatch, driver, passengers } = transfer;
     const { startPoint, destination } = data;
     if (!dispatch || !driver || !passengers || !passengers?.length) {
       setError("Add user to every category");
     } else {
-      addTransferDocument(
+      await addTransferDocument(
         dispatch,
         driver,
         passengers,
@@ -107,7 +108,8 @@ export const AddTransferForm: React.FC<IAddTransferFormProps> = ({
           <DropdownButton
             title={
               transfer.dispatch
-                ? transfer.dispatch?.displayName || transfer.dispatch.user
+                ? transfer.dispatch?.displayName ||
+                  formatId(transfer.dispatch.user)
                 : "No dispatch"
             }
           >
@@ -117,7 +119,7 @@ export const AddTransferForm: React.FC<IAddTransferFormProps> = ({
                   key={user.user}
                   onClick={() => setDispatch(user)}
                 >
-                  {user.displayName || user.user}
+                  {user.displayName || formatId(user.user)}
                 </Dropdown.Item>
               );
             })}
@@ -129,14 +131,14 @@ export const AddTransferForm: React.FC<IAddTransferFormProps> = ({
           <DropdownButton
             title={
               transfer.driver
-                ? transfer.driver?.displayName || transfer.driver.user
+                ? transfer.driver?.displayName || formatId(transfer.driver.user)
                 : "No driver"
             }
           >
             {getUsersByRole(users, "Driver").map((user) => {
               return (
                 <Dropdown.Item key={user.user} onClick={() => setDriver(user)}>
-                  {user.displayName || user.user}
+                  {user.displayName || formatId(user.user)}
                 </Dropdown.Item>
               );
             })}
@@ -153,11 +155,20 @@ export const AddTransferForm: React.FC<IAddTransferFormProps> = ({
                   onClick={() => setPassenger(user)}
                 >
                   {isPassengerChosen(user) && <TiTick color="green" />}
-                  {user.displayName || user.user}
+                  {user.displayName || formatId(user.user)}
                 </Dropdown.Item>
               );
             })}
           </DropdownButton>
+          <div className="mt-1">
+            {transfer.passengers?.map((passenger) => {
+              return (
+                <div key={passenger.user}>
+                  {passenger.displayName || formatId(passenger.user)}
+                </div>
+              );
+            })}
+          </div>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicStartPoint">

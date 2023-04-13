@@ -1,4 +1,4 @@
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { AiOutlineFacebook } from "react-icons/ai";
 import { signInWithPopup } from "firebase/auth";
 import { auth, facebookAuthProvider } from "../../configs/firebase";
@@ -24,14 +24,20 @@ export const FacebookAuth = () => {
       });
   };
 
-  return error ? (
-    <h6 className="text-danger font-weight-bold">Error: {error}</h6>
-  ) : (
-    <Button variant="primary" onClick={authHandler}>
-      <div className="d-flex align-items-center gap-1">
-        <AiOutlineFacebook size={24} />
-        Sign in with Facebook
-      </div>
-    </Button>
+  return (
+    <>
+      <Button variant="primary" onClick={authHandler}>
+        <div className="d-flex align-items-center gap-1">
+          <AiOutlineFacebook size={24} />
+          Sign in with Facebook
+        </div>
+      </Button>
+      <Modal show={!!error} onHide={() => setError("")}>
+        <Modal.Header closeButton>
+          <Modal.Title>Error!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Error: {error}</Modal.Body>
+      </Modal>
+    </>
   );
 };
